@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Gửi Bạn Của Tôi</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #ffe6ea, #ffc2d1);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        text-align: center;
+        color: #d81b60;
+      }
+
+      /* Hiệu ứng trái tim rơi */
+      .hearts-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .heart-float {
+        position: absolute;
+        color: #ff4081;
+        opacity: 0.6;
+        animation: floatUp 5s linear infinite;
+      }
+      @keyframes floatUp {
+        0% {
+          transform: translateY(100vh) scale(0.5);
+          opacity: 0;
+        }
+        50% {
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(-10vh) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      .container {
+        position: relative;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 40px 20px;
+        border-radius: 25px;
+        box-shadow: 0 15px 35px rgba(216, 27, 96, 0.2);
+        width: 90%;
+        max-width: 400px;
+        min-height: 250px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+
+      @keyframes popIn {
+        0% {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .step {
+        display: none;
+        width: 100%;
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      .step.active {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2,
+      p {
+        margin-bottom: 25px;
+        line-height: 1.5;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+      p {
+        font-size: 18px;
+        color: #444;
+      }
+
+      .btn-group {
+        position: relative;
+        width: 100%;
+        height: 120px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      button {
+        background: #ff4081;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4);
+        transition:
+          transform 0.2s,
+          background 0.2s;
+        outline: none;
+      }
+
+      button:active {
+        transform: scale(0.95);
+      }
+      button:hover {
+        background: #f50057;
+      }
+
+      #btnYes {
+        position: relative;
+        z-index: 2;
+      }
+
+      #btnNo {
+        background: #9e9e9e;
+        box-shadow: 0 5px 15px rgba(158, 158, 158, 0.4);
+        position: absolute;
+        transition:
+          left 0.3s ease,
+          top 0.3s ease;
+      }
+
+      #btnNo:hover {
+        background: #757575;
+      }
+
+      #btnNext {
+        margin-top: 15px;
+      }
+
+      .finger-container {
+        position: absolute;
+        right: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: row-reverse;
+        font-size: 24px;
+        white-space: nowrap;
+        padding-right: 10px;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .finger {
+        animation: pointBounce 0.5s infinite alternate;
+        display: inline-block;
+      }
+
+      @keyframes pointBounce {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(5px);
+        }
+      }
+
+      .highlight-text {
+        color: #d81b60;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hearts-bg" id="heartsBg"></div>
+
+    <div class="container">
+      <div id="step1" class="step active">
+        <h2>
+          Bạn cũng nghĩ <span class="highlight-text">Thanh Suyel</span> là người
+          đẹp trai nhất??? 😎
+        </h2>
+        <div class="btn-group">
+          <div style="position: relative">
+            <div class="finger-container" id="fingers"></div>
+            <button id="btnYes" onclick="goToStep(2)">Đúng</button>
+          </div>
+          <button
+            id="btnNo"
+            onmouseover="teleportBtn()"
+            ontouchstart="teleportBtn()"
+          >
+            Không
+          </button>
+        </div>
+      </div>
+
+      <div id="step2" class="step">
+        <p>
+          Xin chào 👋<br /><br />Câu chúc như sau: Tuy là món quà đến muộn á,
+          nhưng mà này cũng là tấm lòng của tôi và tui cũng mong là bạn thấy vui
+          khi nhận được he. 🎁✨
+        </p>
+        <button id="btnNext" onclick="goToStep(3)">Tiếp 💌</button>
+      </div>
+
+      <div id="step3" class="step">
+        <p>
+          <strong>8/3</strong> tui luôn mong cho bạn ngày càng xinh đẹp như hoa
+          vậy đó 🌸 và có sức khỏe để chạy deadline nghe 🏃‍♀️💨<br /><br />Nhớ giữ
+          sức khỏe nhá, khi nào mà cần thứ gì hay gặp khó khăn gì thì alo thằng
+          này nghe 📞, tui mà giúp đc là tui giúp hết mình luôn. 💖
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Tạo hiệu ứng trái tim nền
+      const heartsBg = document.getElementById("heartsBg");
+      const heartSymbols = ["💖", "🌸", "✨", "💕"];
+
+      for (let i = 0; i < 20; i++) {
+        let heart = document.createElement("div");
+        heart.className = "heart-float";
+        heart.innerText =
+          heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = Math.random() * 3 + 3 + "s";
+        heart.style.animationDelay = Math.random() * 5 + "s";
+        heart.style.fontSize = Math.random() * 20 + 15 + "px";
+        heartsBg.appendChild(heart);
+      }
+
+      // Logic nút Không chạy trốn
+      const btnNo = document.getElementById("btnNo");
+      const fingersContainer = document.getElementById("fingers");
+      let clickCount = 0;
+
+      // Cài đặt vị trí ban đầu cho nút Không
+      setTimeout(() => {
+        btnNo.style.left = "60%";
+      }, 100);
+
+      function teleportBtn() {
+        const containerRect = document
+          .querySelector(".container")
+          .getBoundingClientRect();
+        const btnRect = btnNo.getBoundingClientRect();
+
+        // Tính toán khoảng không gian an toàn để nút không bay ra ngoài màn hình
+        const maxX = window.innerWidth - btnRect.width - 20;
+        const maxY = window.innerHeight - btnRect.height - 20;
+
+        const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+        const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+
+        // Đổi position sang fixed để bay tự do trên toàn màn hình
+        btnNo.style.position = "fixed";
+        btnNo.style.left = randomX + "px";
+        btnNo.style.top = randomY + "px";
+
+        // Thêm ngón tay chỉ vào nút đúng
+        clickCount++;
+        let newFinger = document.createElement("span");
+        newFinger.className = "finger";
+        newFinger.innerText = "👉";
+        fingersContainer.appendChild(newFinger);
+      }
+
+      // Logic chuyển trang
+      function goToStep(stepNumber) {
+        document
+          .querySelectorAll(".step")
+          .forEach((el) => el.classList.remove("active"));
+        document.getElementById("step" + stepNumber).classList.add("active");
+
+        if (stepNumber === 3) {
+          // Tăng tốc độ/số lượng trái tim ở màn cuối
+          for (let i = 0; i < 15; i++) {
+            let heart = document.createElement("div");
+            heart.className = "heart-float";
+            heart.innerText = "🎉";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 2 + 2 + "s";
+            heart.style.fontSize = "30px";
+            heartsBg.appendChild(heart);
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
